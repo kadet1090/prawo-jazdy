@@ -16,4 +16,6 @@ COPY package.json package-lock.json next.config.ts ./
 RUN npm ci --production
 
 COPY --from=build /docker/www/build ./build/
+COPY --from=build /docker/www/public ./public/
+
 CMD ["npm", "run", "start"]
