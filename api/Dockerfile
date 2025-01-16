@@ -7,4 +7,5 @@ COPY . .
 RUN npm ci
 RUN npm run build
 
+ENTRYPOINT [ "./docker-entrypoint.sh" ]
 CMD ["npm", "run", "start"]
