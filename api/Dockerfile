@@ -1,11 +1,13 @@
-FROM ubuntu:24.04
+FROM docker.cui.pg.gda.pl/base/node:18
 
-RUN apt update && apt install -y nodejs npm
+WORKDIR /docker/www
 
-WORKDIR /root
 COPY . .
 RUN npm ci
 RUN npm run build
 
-ENTRYPOINT [ "./docker-entrypoint.sh" ]
+COPY --chown=appserver:appserver \
+    ./bin/docker-entrypoint.sh.d/*.sh \
+    /docker/bin/docker-entrypoint.sh.d
+
 CMD ["npm", "run", "start"]
