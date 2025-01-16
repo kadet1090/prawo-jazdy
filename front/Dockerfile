@@ -1,4 +1,4 @@
-FROM docker.cui.pg.gda.pl/base/node:18
+FROM docker.cui.pg.gda.pl/base/node:18 AS build
 
 WORKDIR /docker/www
 
@@ -8,4 +8,12 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+FROM docker.cui.pg.gda.pl/base/node:18
+
+WORKDIR /docker/www
+
+COPY package.json package-lock.json next.config.ts ./
+RUN npm ci --production
+
+COPY --from=build /docker/www/build ./build/
 CMD ["npm", "run", "start"]
